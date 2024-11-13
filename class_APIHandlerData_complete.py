@@ -134,6 +134,9 @@ class APIDataHandler:
 
         # Limpiar la columna 'COD_combination' para eliminar 'Total' y 'TOTAL'
         df["COD_combination"] = df["COD_combination"].apply(self.clean_cod_combination)
+        
+        # Guardarlo como atributo
+        self.hierarchies_info_df = df
 
         # Devolver el DataFrame limpio
         return df
