@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 13 11:28:44 2024
-
-@author: Ana Borrego
-"""
-
 # Directorio de trabajo. 
 
 + `auxiliar_script/`: 
