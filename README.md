@@ -184,9 +184,10 @@ dict_response["id_consulta"]
 ```
 dataset = handler.get_DataFrame_dataJSON()
 ```
+
 ![visualización de datos en formato DataFrame](./imgs/dataset_df.jpg)
 
-````
+```
 handler.df_data
 ```
 
