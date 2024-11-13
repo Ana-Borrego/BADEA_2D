@@ -168,25 +168,53 @@ params = {
 response = requests.get(url, params = params)
 
 # =============================================================================
-# 1. Crea una instancia de la clase APIHandler pasando la respuesta `response` de la API
+# 1. Crea una instancia de la clase APIHandler pasando la respuesta `response` de la API.
 # =============================================================================
 
 handler = APIDataHandler(response)
 
 # =============================================================================
-# 2. Procesa las jerarquías llamando al método `process_all_hierarchies`
+# 1.1. Consulta de los atributos iniciales de la clase.
+# =============================================================================
+handler.response
+handler.JSONdata
+handler.hierarchies
+handler.data
+handler.measures
+handler.metainfo
+handler.id_consulta
+
+# =============================================================================
+# 2. Consulta de los elementos en formato diccionario. 
+# =============================================================================
+
+dict_response = handler.get_elements_of_response()
+dict_response
+dict_response["jerarquias"]
+dict_response["id_consulta"]
+
+# =============================================================================
+# 3. Consulta de datos que devuelve BADEA tras la petición, en formato DataFrame:
+# =============================================================================
+
+dataset = handler.get_DataFrame_dataJSON()
+handler.df_data
+
+# =============================================================================
+# 4. Hacer petición a "url" de información de una de las jerarquías. 
+# =============================================================================
+
+hier = handler.hierarchies[0]
+values_hier = handler.request_hierarchies_values(hier)
+
+# =============================================================================
+# 5. Procesa las jerarquías llamando al método `process_all_hierarchies`
 # =============================================================================
 
 processed_data = handler.process_all_hierarchies()
 
 # =============================================================================
-# 4. Guardar el dataframe resultante con `.to_excel()`
+# 5.1. Guardar el dataframe resultante con `.to_excel()`
 # =============================================================================
 # cleaned_data.to_excel("jerarquias_limpiadas.xlsx")
 # =============================================================================
-
-
-
-
-
-
