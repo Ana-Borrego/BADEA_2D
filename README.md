@@ -7,6 +7,7 @@
     + `def_class_for_response.py` : clase APIDataHandler en una versión beta, sin aplanamiento de las jerarquías, sólo con métodos de manejo de información.
     + `functions_BADEA.py` : recoge las funciones de la clase final en un único script.
 + `class_APIDataHandler_complete.py` : modelo final de definición de clase con todos los métodos implementados. 
++ `examples.py` : casos de uso.
 
 ------------------------------------------------------------------------
 
@@ -129,6 +130,8 @@ El método `.process_all_hierarchies` procesa todas las jerarquías, creando com
 El resultado puede ser descargado en el formato deseado, y/o consultado mediante el atributo `self.hierarchies_info_df`, para la generación de nuevas consultas. Además el resultado es utilizado en el método final de aplanamiento en 2 dimensiones de los datos de consulta devueltos por BADEA. 
 
 ## 3. Casos de Uso. Ejemplos. 
+
+Se puede ver el código en `examples.py`
 
 ```
 url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
