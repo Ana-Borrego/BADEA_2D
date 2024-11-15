@@ -34,13 +34,11 @@ git clone https://github.com/Ana-Borrego/BADEA_2D.git
     Si deseas evitar conflictos con las dependencias de otros proyectos, es recomendable crear un entorno virtual. Usa los siguientes comandos según tu sistema operativo:
 
     + Para sistemas basados en Unix (Linux/macOS):
-
 ``` bash
 python3 -m venv venv
 source venv/bin/activate
 ```
-
-    + Para Windows:
++ Para Windows:
 
 ```bash
 python -m venv venv
