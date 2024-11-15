@@ -163,7 +163,10 @@ Ahora ya tienes todas las dependencias necesarias instaladas para trabajar con e
             + Columna `COD_combination`: lista con los códigos referentes al nivel del valor de la jerarquía, de forma que ofrece información de quién es el padre y del camino recorrido para llegar a dicho valor de nivel. 
             + Columnas `Des{i}`: Son los distintos valores categóricos de los grupos recorridos para llegar al último nivel. Está relacionado directamente con la combinación de códigos `COD_combination`. Toma el valor None cuando no hay un nivel de desagregación mayor a `i`. 
 
-9. `.map_data_w_hierarchies_info(self)`: 
+9. `.save_hierarchies_level(self, path)`: 
+    + Método para exportar la información de categorías de jerarquías.
+
+10. `.map_data_w_hierarchies_info(self)`: 
     + **Descripción**: Mapea los datos originales (`self.dataset`) con la información de las jerarquías almacenada en `self.hierarchies_info_df`. Este método integra los valores jerárquicos dentro del conjunto de datos, normaliza los nombres de las columnas, y organiza las columnas para facilitar el análisis.
     + **Parámetros**:
         + No recibe parámetros externos. Utiliza los **atributos** de la clase:
@@ -184,27 +187,82 @@ Ahora ya tienes todas las dependencias necesarias instaladas para trabajar con e
 
 ***
 
-## 2. Flujo de trabajo. 
+## 2. Flujo de trabajo para obtener los datos aplanados y mapeados. 
 
 ### 2.1. Inicialización.
 
-Se crea una instancia de la clase APIDataHandler pasando la respuesta de la API. El constructor (`__init__`) extrae la información clave y la almacena en atributos de la clase. 
+Llamar al constructor `__init__` con la respuesta de la consulta `requests.get()` a la API. 
++ Guarda la respuesta de la API en un objeto JSON y extrae los elementos clave: jerarquías, datos, medidas, y metainformación.
 
-Para crear una instancia de la clase se precisa de proporcionarle la url a la tabla de IECA que se quiere obtener por consulta HTTPS desde la API de BADEA, y los parámetros, en forma de diccionario `params`, sobre el filtrado que se desea consultar. 
+**Resultado**: Los datos crudos y las jerarquías están disponibles como atributos de la clase (`self.data`, `self.hierarchies`, etc.). 
 
-### 2.2. Obtener elementos de la respuesta. 
+### 2.2. Visualización de los elementos clave (opcional). 
 
-Se pueden obtener los elementos clave de la respuesta usando el método `.get_elements_of_response`, que devuelve un diccionario con las jerarquías, medidas, metainformación, etc.
+Se pueden obtener los elementos clave de la respuesta usando el método `.get_elements_of_response` y visualizarlos de una forma más clara. 
 
-### 2.3. Transformación de la clave de respuesta `"data"` a `DataFrame` de pandas. 
+**Resultado**: Diccionario con claves como "jerarquias", "medidas", "metainfo", y "datos".
 
-El método `.get_DataFrame_dataJSON` toma los datos de la respuesta y los convierte en un DataFrame de Pandas. Este DataFrame incluye tanto los datos estructurados como los códigos de las jerarquías, gracias a un proceso de extracción interno de los mismos. *Las columnas de código tendrán como sufijo `_cod`*. 
+### 2.3. Procesamiento inicial de los datos brutos de la respuesta de la API.  
+
+Llamar a `.get_DataFrame_dataJSON()` para estructurar los datos JSON en un DataFrame.
++ El método `.get_DataFrame_dataJSON` toma los datos de la respuesta y los convierte en un `DataFrame` de Pandas. Este `DataFrame` incluye tanto los datos estructurados como los códigos de las jerarquías, gracias a un proceso de extracción interno de los mismos. 
++ *Las columnas de código tendrán como sufijo `_cod`*. 
++ Si `process_measures=True`, se procesan las columnas de medidas (extrae el valor asociado a la clave 'val' en las columnas relevantes).
+
+**Resultado**: Un `DataFrame` estructurado con columnas correspondientes a las jerarquías y medidas
 
 ### 2.4. Procesar jerarquías. 
 
-El método `.process_all_hierarchies` procesa todas las jerarquías, creando combinaciones de códigos y descripciones para el mapeo o la visualización de los valores posibles de los parámetros de consulta (correspondientes a la integración del valor `id` (siguiendo formato "{id_1},{id_2},{id_3}") en el parámetro de `params` deseado). También limpia la columna COD_combination eliminando valores no deseados para facilitar el mapeo. 
+Llamar a `.process_all_hierarchies()` para extraer y aplanar la información jerárquica.
++ Este método utiliza el método recursivo `.process_hierarchy_level` para recorrer los niveles jerárquicos y extraer las combinaciones de códigos y descripciones.
++ El método `.process_all_hierarchies` procesa todas las jerarquías, creando combinaciones de códigos y descripciones para el mapeo o la visualización de los valores posibles de los parámetros de consulta (correspondientes a la integración del valor `id` (siguiendo formato "{id_1},{id_2},{id_3}") en el parámetro de `params` deseado). También limpia la columna `'COD_combination'` eliminando valores no deseados (gracias a `.clean_cod_combination()`) para facilitar el mapeo. 
 
-El resultado puede ser descargado en el formato deseado, y/o consultado mediante el atributo `self.hierarchies_info_df`, para la generación de nuevas consultas. Además el resultado es utilizado en el método final de aplanamiento en 2 dimensiones de los datos de consulta devueltos por BADEA. 
+
+**Resultado**: consiste en un `DataFrame` con la información jerárquica mapeada
+
+*Nota:* El resultado puede ser descargado en el formato deseado, y/o consultado mediante el atributo `self.hierarchies_info_df`, para la generación de nuevas consultas. Además el resultado es utilizado en el método final de aplanamiento en 2 dimensiones de los datos de consulta devueltos por BADEA. 
+
+### 2.5. Mapeo de datos con jerarquías. 
+
+Llamar a `.map_data_w_hierarchies_info()` para integrar los datos originales con la información de las jerarquías.
++ Este método utiliza los códigos jerárquicos en `self.data_df` y mapea las descripciones jerárquicas desde `self.hierarchies_info_df`.
+
+**Resultado**: El `DataFrame` final (`self.df_data_mapped`) está listo para análisis o exportación.
+
+### Resultados intermedios y final. 
+
++ `self.data_df`: Datos iniciales estructurados con jerarquías y medidas.
++ `self.hierarchies_info_df`: Información jerárquica aplanada, lista para mapeo.
++ `self.df_data_mapped`: Dataset final aplanado, con jerarquías y datos combinados.
+
+#### Ejemplo de flujo completo. 
+
+``` python
+from src/main.py import APIHandlerData  # Asegúrate de importar la clase desde el módulo correcto
+
+# Paso 1: Inicializar la clase con la respuesta de la API
+handler = APIHandlerData(response, params = {})
+
+# Paso 2: (Opcional) Explorar los elementos clave de la respuesta
+elementos = handler.get_elements_of_response()
+print(elementos)  # Visualizar elementos clave
+
+# Paso 3: Procesar y estructurar los datos en un DataFrame
+handler.get_DataFrame_dataJSON(process_measures=True)
+print(handler.data_df)  # Ver los datos iniciales procesados
+
+# Paso 4: Procesar las jerarquías y aplanarlas
+handler.process_all_hierarchies()
+print(handler.hierarchies_info_df)  # Ver las jerarquías procesadas
+handler.save_hierarchies_level("url/de/exportacion")
+
+# Paso 5: Mapear los datos originales con las jerarquías procesadas
+handler.map_data_w_hierarchies_info()
+print(handler.df_data_mapped)  # Dataset final aplanado
+
+# Resultado final
+dataset_final = handler.df_data_mapped
+```
 
 ## 3. Casos de Uso. Ejemplos. 
 
