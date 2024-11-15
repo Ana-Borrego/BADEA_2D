@@ -7,7 +7,7 @@ Created on Fri Nov 15 10:29:47 2024
 import requests
 import pandas as pd
 import re
-import class_APIHandlerData_complete  as ahd
+import src.main  as ahd
 
 # Función para reemplazar acentos y espacios usando regex
 def limpiar_texto(texto):
