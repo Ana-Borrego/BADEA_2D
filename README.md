@@ -21,7 +21,7 @@ Consiste en un análisis, siguiendo una estructura de proceso ETL, y una limpiez
 
 ---
 
-# 0. Instrucciones para la instalación. 
+## 0. Instrucciones para la instalación. 
 
 1. **Clona el repositorio:** 
 
@@ -268,7 +268,7 @@ dataset_final = handler.df_data_mapped
 
 Se puede ver el código en `examples.py`
 
-```
+```python
 url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
 # parámetros de consulta: 
 params = {
@@ -284,7 +284,7 @@ response = requests.get(url, params = params)
 
 1. Inicialización:
 
-```
+```python
 handler = APIDataHandler(response)
 # <__main__.APIDataHandler at 0x18d4ff3fd70>
 ```
@@ -293,7 +293,7 @@ handler = APIDataHandler(response)
 
 Acceso a los atributos iniciales de las clases: 
 
-```
+```python
 handler.response
 handler.JSONdata
 handler.hierarchies
@@ -305,27 +305,27 @@ handler.id_consulta
 
 2. Obtener elementos de la respuesta:
 
-```
+```python
 dict_response = handler.get_elements_of_response()
 dict_response
 ```
 
 ![visualización de dict_response](./imgs/dict_response.jpg)
 
-```
+```python
 dict_response["id_consulta"]
 # 44804
 ```
 
 3. Consulta de datos que devuelve BADEA tras la petición (handler.data), en formato DataFrame:
 
-```
+```python
 dataset = handler.get_DataFrame_dataJSON()
 ```
 
 ![visualización de datos en formato DataFrame](./imgs/dataset_df.jpg)
 
-```
+```python
 handler.df_data
 ```
 
@@ -333,7 +333,7 @@ handler.df_data
 
 4. Hacer petición a "url" de información de una de las jerarquías:
 
-```
+```python
 hier = handler.hierarchies[0]
 values_hier = handler.request_hierarchies_values(hier)
 ```
@@ -344,7 +344,7 @@ values_hier = handler.request_hierarchies_values(hier)
 
 5. Procesa las jerarquías llamando al método `process_all_hierarchies`:
 
-```
+```python
 processed_data = handler.process_all_hierarchies()
 ```
 
@@ -352,6 +352,12 @@ processed_data = handler.process_all_hierarchies()
 
 Guardar el dataframe resultante con `.to_excel()`
 
+```python
+handler.save_hierarchies_level("jerarquias_limpiadas.xlsx")
 ```
-cleaned_data.to_excel("jerarquias_limpiadas.xlsx")
+6. Mapear los datos y las jerarquías. 
+
+```python
+handler.map_data_w_hierarchies_info()
 ```
+
