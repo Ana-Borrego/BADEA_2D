@@ -440,7 +440,44 @@ class APIDataHandler:
         result = functions.remove_column(result, "COD_combination")
         return result
     
-    def map_data_w_hierarchies_info(self): 
+    def map_data_w_hierarchies_info(self):
+        """
+        Mapea los datos del conjunto de datos original (`self.dataset`) con la información de las jerarquías 
+        (`self.hierarchies_info_df`) para integrar los valores jerárquicos dentro del DataFrame de medidas 
+        y códigos, y organiza las columnas resultantes.
+    
+        Este método realiza la normalización de los nombres de las columnas, la selección de las columnas relevantes
+        para el análisis, la preparación de la información de las jerarquías y la unión de los datos según los códigos
+        de jerarquía. Al final, genera un DataFrame mapeado que incluye tanto los datos originales como los valores jerárquicos.
+    
+        Parámetros:
+            Ninguno. El método utiliza los atributos de la clase (`self.dataset`, `self.measures`, `self.hierarchies_info_df`).
+    
+        Retorna:
+            pd.DataFrame: Un DataFrame con los datos originales mapeados con la información de las jerarquías, 
+                          con las columnas organizadas para su análisis.
+    
+        Funcionalidad:
+            1. Normaliza los nombres de las columnas en `self.dataset` utilizando la función `functions.norm_columns_name`.
+            2. Prepara el nombre de las columnas de las medidas de acuerdo con las descripciones de `self.measures`.
+            3. Filtra las columnas relevantes para el análisis, incluyendo las columnas de códigos (`_cod`) y las medidas.
+            4. Prepara la información de las jerarquías para cada nivel, extrayendo los nombres de las columnas de descripciones
+               y filtrando la información correspondiente de `self.hierarchies_info_df`.
+            5. Mapea las columnas de códigos de jerarquía con los valores jerárquicos en `self.hierarchies_info_df`, 
+               renombrando las columnas de descripción y uniendo los DataFrames de acuerdo con los códigos de combinación.
+            6. Al final, devuelve el DataFrame mapeado que incluye tanto los códigos como las descripciones jerárquicas.
+    
+        Ejemplo de uso:
+            >>> handler.map_data_w_hierarchies_info()
+            >>> print(handler.df_data_mapped)
+            # El DataFrame resultante contendrá las columnas de medidas y códigos, con las descripciones jerárquicas mapeadas.
+    
+        Notas:
+            - El proceso depende de las columnas de códigos (que terminan en '_cod') y las medidas que se definen en `self.measures`.
+            - La información de las jerarquías se extrae de `self.hierarchies_info_df` y se mapea a las columnas de códigos.
+            - El DataFrame resultante contiene tanto las columnas originales como las nuevas columnas con las descripciones jerárquicas.
+            - El método genera y guarda el DataFrame mapeado como el atributo `self.df_data_mapped`.
+        """
         # Preparar la tabla de datos para el mapeo.
         self.dataset = functions.norm_columns_name(self.dataset)
         n_medidas = len(self.measures)
