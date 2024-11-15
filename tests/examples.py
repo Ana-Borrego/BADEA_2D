@@ -11,6 +11,33 @@ import class_APIHandlerData_complete  as ahd
 
 # Función para reemplazar acentos y espacios usando regex
 def limpiar_texto(texto):
+    """
+    Limpia un texto eliminando acentos y caracteres especiales, y reemplaza espacios por guiones bajos.
+
+    Parámetros:
+        texto (str): El texto a limpiar.
+
+    Retorna:
+        str: El texto limpio, sin acentos ni espacios.
+
+    Funcionalidad:
+        1. Reemplaza caracteres acentuados por sus equivalentes sin acento, 
+           según un diccionario predefinido.
+        2. Sustituye espacios (incluidos múltiples espacios consecutivos) por guiones bajos ('_').
+
+    Ejemplo de uso:
+        >>> limpiar_texto("Café con Leche")
+        'Cafe_con_Leche'
+        >>> limpiar_texto("Niño/a Ágil")
+        'Nino_a_Agil'
+
+    Notas:
+        - Es útil para uniformizar texto antes de procesar datos.
+        - Utiliza expresiones regulares para realizar las sustituciones.
+
+    Dependencias:
+        - La función usa el módulo `re` de Python para trabajar con expresiones regulares.
+    """
     # Diccionario de reemplazo de acentos
     acentos = {
         'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
@@ -26,14 +53,35 @@ def limpiar_texto(texto):
 
 def norm_columns_name(df):
     """
-    Normaliza los nombres de las columnas de un DataFrame eliminando acentos
-    y reemplazando los espacios por guiones bajos.
-    
+    Normaliza los nombres de las columnas de un DataFrame eliminando acentos y reemplazando espacios por guiones bajos.
+
     Parámetros:
-    df (pd.DataFrame): DataFrame con nombres de columnas a normalizar.
-    
+        df (pd.DataFrame): DataFrame cuyas columnas serán normalizadas.
+
     Retorna:
-    pd.DataFrame: DataFrame con nombres de columnas normalizados.
+        pd.DataFrame: Una copia del DataFrame con nombres de columnas normalizados.
+
+    Funcionalidad:
+        1. Recorre los nombres de las columnas del DataFrame.
+        2. Aplica la función `limpiar_texto` a cada nombre de columna
+        3. Asigna los nombres normalizados al DataFrame original.
+
+    Ejemplo de uso:
+        >>> import pandas as pd
+        >>> data = {"Número de Teléfono": [123, 456], "Ciudad": ["México", "Bogotá"]}
+        >>> df = pd.DataFrame(data)
+        >>> norm_columns_name(df)
+           Numero_de_Telefono   Ciudad
+        0                 123   México
+        1                 456   Bogotá
+
+    Notas:
+        - Este proceso es útil para evitar problemas de compatibilidad al trabajar con columnas
+          que tienen espacios o caracteres no estándar.
+        - Asegúrate de que el DataFrame tenga columnas no vacías antes de usar esta función.
+
+    Dependencias:
+        - Requiere la función `limpiar_texto` para procesar cada nombre de columna.
     """
     # Renombrar columnas aplicando la función de limpieza
     df.columns = [limpiar_texto(col) for col in df.columns]
@@ -63,6 +111,7 @@ response = requests.get(url, params = params)
 # 1. Crea una instancia de la clase APIHandler pasando la respuesta `response` de la API.
 # =============================================================================
 
+# handler = ahd.APIDataHandler(response)
 handler = ahd.APIDataHandler(response)
 
 # =============================================================================
@@ -110,62 +159,3 @@ processed_data = handler.process_all_hierarchies()
 # =============================================================================
 # cleaned_data.to_excel("jerarquias_limpiadas.xlsx")
 # =============================================================================
-
-### Mapeo de Jerarquías
-
-hierarchies_used = pd.unique(processed_data.Variable)
-name_cols = [re.search(r'D(?:_AA)?_(.*?)_0', elem).group(1) for elem in hierarchies_used]
-
-# =============================================================================
-# Explicación de las expresiones regulares
-# D(?:_AA)?_ : busca el prefijo D_, opcionalmente seguido de _AA_.
-# (.*?) : grupo de captura captura cualquier palabra entre el prefijo y _0.
-# _0 : es el sufijo final que indica el final de la palabra que necesitas.
-# =============================================================================
-# Explicación de las funciones utilizadas para el manejo de expresiones regulares:
-# 1. re.search(pattern, string) : buscar pattern en una cadena de texto string. 
-#       Busca en cualquier posición, a diferencia de re.match() que busca al inicio de la cadena. 
-#       Devuelve un objeto de coincidencia si encuentra el patrón en la cadena; de lo contrario, devuelve None
-# Cuando re.search() encuentra una coincidencia, devuelve un objeto de coincidencia (match_object).
-# 2. match_object.group(1) 
-#       Usamos .group(1) para extraer específicamente la parte de la coincidencia que está dentro de los paréntesis
-#       (...) en el patrón de expresión regular. 
-#       En nuestro caso, el grupo de captura es (.*?) y con .group(1), estamos indicando que queremos el contenido de este primer grupo de captura.
-# =============================================================================
-# =============================================================================
-# Ejemplo: Supón que tienes una cadena como "D_AA_TERRITROIO_0". Con re.search(), el objeto de coincidencia tendrá:
-#           Grupo 0 (toda la coincidencia): "D_AA_TERRITROIO_0"
-#           Grupo 1 (solo el grupo capturado): "TERRITROIO"
-# Así, .group(1) devuelve "TERRITROIO", que es el valor que queremos extraer de la cadena.
-# =============================================================================
-
-dataset = norm_columns_name(dataset)
-n_med = len(handler.measures)
-if n_med == 1: 
-    col_medida = [limpiar_texto(handler.measures[0]["des"])]
-else: 
-    col_medida = [limpiar_texto(handler.measures[i]["des"]) for i in range(n_med)]
-
-# columnas que contienen el código : 
-cod_columns = dataset.filter(regex='_cod$').columns.tolist()
-selected_columns = cod_columns + col_medida
-cod_df = dataset[selected_columns]
-
-# esas columnas serán mapeadas según la jerarquía con la tabla `processed_data`
-for alias, col in zip(hierarchies_used, name_cols): 
-    # Filtramos para los posibles valores de la jerarquía en cuestión:
-    hier_df_values = processed_data[processed_data['Variable']==alias]
-    # Seleccionamos las columnas de interés para unir al dataset de datos:
-    columns_to_select = hier_df_values.filter(regex=r'^COD_combination$|^Des\d+$').columns
-    to_merge = hier_df_values[columns_to_select]
-    # Renombramos las columnas de descripción para ponerles el valor de columna y su nivel de desagregación
-    # el cuál viene dado por la i en "Des{i}". 
-    columns_to_rename = hier_df_values.filter(regex=r'^Des\d+$').columns
-        # Crear un diccionario para renombrar las columnas, reemplazando 'Des' por el valor de col
-    rename_dict = {col_name: col_name.replace('Des', col) for col_name in columns_to_rename}
-        # Renombrar las columnas en el DataFrame
-    hier_df_values = hier_df_values.rename(columns=rename_dict)
-    # Unimos con el conjunto de datos por "cod_combination" en los valores de jerarquía y por la columna correspondiente "_cod" en el dataset
-    dataset = pd.merge(dataset, hier_df_values, left_on = alias + "_cod", right_on = "COD_combination", how = "left")
-
-    

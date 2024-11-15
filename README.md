@@ -6,6 +6,7 @@
     + `datos_script_apoyo.py` : script de IECA_extractor que se ha utilizado como apoyo para la definición de la clase final y el tratamiento de la respuesta proporcionada por BADEA.
     + `def_class_for_response.py` : clase APIDataHandler en una versión beta, sin aplanamiento de las jerarquías, sólo con métodos de manejo de información.
     + `functions_BADEA.py` : recoge las funciones de la clase final en un único script.
+    + `codigo_mapeo_jerarquia.py` : código utilizado para generalizar el método de mapeo de los datos y las jerarquías en cuestión. 
 + `class_APIDataHandler_complete.py` : modelo final de definición de clase con todos los métodos implementados. 
 + `examples.py` : casos de uso.
 
