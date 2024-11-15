@@ -2,3 +2,6 @@ requests
 pandas 
 logging
 re 
+numpy
+os
+sys
