@@ -54,6 +54,8 @@ pip install -r requirements.txt
 **¡Listo!**
 Ahora ya tienes todas las dependencias necesarias instaladas para trabajar con el proyecto.
 
+*** 
+
 ## 2. Flujo de trabajo. 
 
 ### 2.1. Inicialización.
