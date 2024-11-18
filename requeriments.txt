@@ -5,3 +5,5 @@ re
 numpy
 os
 sys
+unittest
+unittest-xml-reporting
