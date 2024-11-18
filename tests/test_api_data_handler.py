@@ -12,12 +12,10 @@ class TestAPIDataHandlerRealQuery(unittest.TestCase):
         """Realiza una consulta real a la API y configura la clase."""
         self.url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
         self.params = {
-            "D_TEMPORAL_0": "180194",
-            "AA_TERRITROIO_0": "515892",
-            "D_SEXO_0": "3691,3689,3690",
-            "posord": "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_DURAULTEMPR_0],c[Measures]"
+            "D_TEMPORAL_0" : "180156,180175,180194",
+            "AA_TERRITROIO_0" : "515892,515902",
+            "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_TIPRELSSANO_0],c[Measures]"
         }
-
         # Realizar la solicitud a la API
         response = requests.get(self.url, params=self.params)
         self.assertEqual(response.status_code, 200, "La API no está disponible o la consulta falló.")
@@ -36,7 +34,7 @@ class TestAPIDataHandlerRealQuery(unittest.TestCase):
         df_mapped = self.handler.df_data_mapped
         self.assertIsNotNone(df_mapped, "El DataFrame mapeado está vacío.")
         self.assertGreater(len(df_mapped), 0, "El DataFrame mapeado no contiene filas.")
-        self.assertTrue("Des1" in df_mapped.columns, "La columna Des1 no está presente en el DataFrame mapeado.")
+        self.assertTrue("Des1" in self.handler.hierarchies_info_df.columns, "La columna Des1 no está presente en el DataFrame mapeado.")
 
 if __name__ == "__main__":
     unittest.main()
