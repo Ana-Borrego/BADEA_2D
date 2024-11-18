@@ -3,3 +3,5 @@ data/*.xls
 data/*.xlsx
 result_script_pbi/info/*.xlsx
 result_script_pbi/skjdfh.txt
+*.xlsx
+*.xls
