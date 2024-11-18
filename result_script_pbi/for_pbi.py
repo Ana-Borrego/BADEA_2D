@@ -181,7 +181,6 @@ class APIDataHandler:
         return df
 
     def save_hierarchies_level(self, path):
-
         self.hierarchies_info_df.to_excel(path)
     
     def union_by_cod_combination(self, df1_data, df2_hier, col1, col2):
@@ -245,9 +244,5 @@ handler = APIDataHandler(response)
 dataset_aux = handler.get_DataFrame_dataJSON(process_measures = True) 
 processed_data = handler.process_all_hierarchies()
 dataset = handler.map_data_w_hierarchies_info()
-
-hierar_i = handler.hierarchies_info_df
-
-hierar_i[hierar_i['Variable'] == "D_TEMPORAL_0"].to_excel("./info/id_ano.xlsx", index = False)
 
 del dataset_aux, processed_data
