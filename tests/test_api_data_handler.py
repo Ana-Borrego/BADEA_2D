@@ -4,7 +4,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-from src.main import APIDataHandler  # Cambia esto por el módulo real donde resides la clase
+from src.main import APIDataHandler 
 
 class TestAPIDataHandlerRealQuery(unittest.TestCase):
 
