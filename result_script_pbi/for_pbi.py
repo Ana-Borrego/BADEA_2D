@@ -9,13 +9,13 @@ import pandas as pd
 import logging
 import re
 
+
 url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
 
 params = {
     "D_TEMPORAL_0" : "180156,180175,180194",
     "AA_TERRITROIO_0" : "515892,515902",
-    "D_SEXO_0" : "3691,3689,3690",
-    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_DURAULTEMPR_0],c[Measures]"
+    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_TIPRELSSANO_0],c[Measures]"
 }
 
 # Realizar request GET
