@@ -18,6 +18,9 @@ Consiste en un análisis, siguiendo una estructura de proceso ETL, y una limpiez
     + `functions.py`: funciones necesarias para la implementación de ciertos métodos del tratamiento de datos de `main.py`
 + `tests/`: pruebas realizadas para la verificación de la funcionalidad.  
     + `examples.py` : casos de uso.
+    + `test_api_data_handler.py` : prueba unittest de la funcionalidad de la clase de manejo de los datos recibidos de consulta.
+    + `test_execution.md` : Descripción de la prueba unittest realizada. 
++ `test-reports/` : ruta de guardado de informes generados con las pruebas de `tests/` realizadas en la terminal. 
 
 ---
 
