@@ -10,12 +10,14 @@ import logging
 import re
 
 
-url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
+url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/50810?"
 
 params = {
-    "D_TEMPORAL_0" : "180156,180175,180194",
-    "AA_TERRITROIO_0" : "515892,515902",
-    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_TIPRELSSANO_0],c[Measures]"
+    "D_TEMPORAL_0" : "55498,55517,55536,180156,180175"
+# =============================================================================
+#     ,
+#     "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_TIPRELSSANO_0],c[Measures]"
+# =============================================================================
 }
 
 # Realizar request GET
