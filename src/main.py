@@ -11,7 +11,12 @@ import logging
 import re
 
 # Auxiliar functions for processing data in APIHandlerData
+import os
+os.chdir("C:/Users/Ana Borrego/Desktop/proyectos/andalucia_emprende/VISOR/request_py/")
 from src import functions
+# =============================================================================
+# import functions
+# =============================================================================
 
 # Class for handle API response definition. 
 class APIDataHandler:
@@ -84,11 +89,14 @@ class APIDataHandler:
         """
         Procesa columnas que contienen diccionarios, extrayendo el valor asociado a la clave 'val', 
         y reorganiza dichas columnas para que aparezcan al final del DataFrame.
+        Además, convierte los valores de las columnas correspondientes a 'measures' a texto, 
+        reemplazando los puntos por comas.
     
         Parámetros:
             df (pd.DataFrame): El DataFrame que será modificado.
-            measures (list): Lista de nombres de columnas que contienen diccionarios con la clave 'val'.
+            measures (list of dicts): Lista de nombres de columnas que contienen diccionarios con la clave 'val'.
                              Estas columnas serán procesadas y reordenadas al final del DataFrame.
+            self.measures_columns : guarda las columnas de medidas para que el último método muestre el dataset completo ordenado. 
     
         Retorna:
             pd.DataFrame: El DataFrame modificado, con las columnas `measures` procesadas y reubicadas 
@@ -122,14 +130,21 @@ class APIDataHandler:
             - Si las columnas especificadas no contienen diccionarios, sus valores no serán modificados.
             - La función realiza una reorganización de columnas; esto puede afectar procesos que dependan del orden original de las mismas.
         """
-        for col in self.measures:
+        n_measures = len(self.measures)
+        measures_des = []
+        for i in range(n_measures):
+            col = self.measures[i]["des"]
+            measures_des.append(col)
             if col in df_data.columns:
                 # Extraer el valor de la clave 'val' en cada fila
                 df_data[col] = df_data[col].apply(lambda x: x.get('val') if isinstance(x, dict) else x)
+                # Convertir valores a texto y reemplazar puntos por comas
+                df_data[col] = df_data[col].astype(str).str.replace('.', ',', regex=False)
         
+        self.measure_columns = list(map(functions.clean_text, measures_des))
         # Reorganizar las columnas: mover las columnas de `measures` al final
-        remaining_columns = [col for col in df_data.columns if col not in self.measures]
-        df_data = df_data[remaining_columns + self.measures]
+        remaining_columns = [col for col in df_data.columns if col not in measures_des]
+        df_data = df_data[remaining_columns + measures_des]
         
         return df_data
     
@@ -479,7 +494,7 @@ class APIDataHandler:
             - El método genera y guarda el DataFrame mapeado como el atributo `self.df_data_mapped`.
         """
         # Preparar la tabla de datos para el mapeo.
-        self.dataset = functions.norm_columns_name(self.dataset)
+        self.df_data = functions.norm_columns_name(self.df_data)
         n_medidas = len(self.measures)
             # Generar nombre normalizado para las columnas de medidas 
         if n_medidas == 1: 
@@ -489,11 +504,16 @@ class APIDataHandler:
         
         # Disminuir la información del dataset para ahorrar coste computacional, 
         # filtrando por las columnas que nos interesan para el análisis. 
-        cod_columns = self.dataset.filter(regex='_cod$').columns.tolist()
+        cod_columns = self.df_data.filter(regex='_cod$').columns.tolist()
         selected_columns = cod_columns + col_medida
-        cod_df = self.dataset[selected_columns].copy()
+        cod_df = self.df_data[selected_columns].copy()
         
         # Preparación de la información de las jerarquías
+# =============================================================================
+#         if self.hierarchies_info_df.empty(): 
+#             self.process_all_hierarchies()
+# =============================================================================
+            
         hierarchies_used = pd.unique(self.hierarchies_info_df.Variable)
         name_cols = [re.search(r'D(?:_AA)?_(.*?)_0', elem).group(1) for elem in hierarchies_used]
         
@@ -512,6 +532,8 @@ class APIDataHandler:
             # Unión del conjunto de datos por "COD_combination" en la tabla de valores de jerarquías y por la columna "_cod" correspondiente a la jerarquía
             cod_df = self.union_by_cod_combination(cod_df, hier_df_values, alias + "_cod", "COD_combination")
             
+        remaining_col = [col for col in cod_df.columns if col not in self.measure_columns]
+        cod_df = cod_df[remaining_col + self.measure_columns]
         self.df_data_mapped = cod_df.copy()
         return cod_df
         
