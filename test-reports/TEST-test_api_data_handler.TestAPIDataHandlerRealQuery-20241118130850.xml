@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_api_data_handler.TestAPIDataHandlerRealQuery-20241118130850" tests="1" file="test_api_data_handler.py" time="30.880" timestamp="2024-11-18T13:09:21" failures="0" errors="0" skipped="0">
+	<testcase classname="test_api_data_handler.TestAPIDataHandlerRealQuery" name="test_real_api_processing" time="30.880" timestamp="2024-11-18T13:09:21" file="tests\test_api_data_handler.py" line="26">
+		<!--Prueba el procesamiento de datos reales de la API.-->
+	</testcase>
+</testsuite>
