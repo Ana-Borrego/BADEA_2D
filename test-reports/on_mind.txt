@@ -1,0 +1,11 @@
+Usar unittest-xml-reporting
+Puedes usar esta biblioteca para generar un informe en formato XML que es compatible con herramientas de CI/CD como Jenkins o GitLab CI/CD.
+
+(Terminal)
+Instalación:
+    pip install unittest-xml-reporting
+
+Ejecución: 
+    python -m xmlrunner discover -s tests -p "test_api_data_handler.py" -o test-reports
+
+
