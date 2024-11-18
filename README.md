@@ -21,8 +21,9 @@ Consiste en un análisis, siguiendo una estructura de proceso ETL, y una limpiez
     + `test_api_data_handler.py` : prueba unittest de la funcionalidad de la clase de manejo de los datos recibidos de consulta.
     + `test_execution.md` : Descripción de la prueba unittest realizada. 
 + `test-reports/` : ruta de guardado de informes generados con las pruebas de `tests/` realizadas en la terminal. 
-+ `result_script_pbi/` : carpeta donde se encuentra la información requerida para la conexión del proyecto con PowerBI, para la generación de una visualización automatizada de consultas al Instituto Estadístico y Cartográfico de Andalucía. 
-    + `Process_of_conection.md` : Guía de conexión del proyecto con PowerBI, con instrucciones sobre actualización del mismo mediante consultas a la API. 
++ `result_script_pbi/` : *Descripción reducida del directorio, para más información acceder al directorio.*
+    + **Descripción** : carpeta donde se encuentra la información requerida para la conexión del proyecto con PowerBI, para la generación de una visualización automatizada de consultas al Instituto Estadístico y Cartográfico de Andalucía. 
+    + `Process_of_conection.md` : Guía de conexión del proyecto con PowerBI, con instrucciones sobre actualización del mismo mediante consultas a la API. Descripción completa del directorio. 
     + `for_pbi.py` : fichero que será origen de datos en PowerBI. 
     
 
