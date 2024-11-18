@@ -1,0 +1,30 @@
+Try new consults on PowerBI: 
+
+# Autónomos por sexo, grupo de edad y duración del último emprendimiento (*)
+
+url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
+
+params = {
+    "D_TEMPORAL_0" : "180156,180175,180194",
+    "D_AA_TERRITROIO_0" : "515892,515902",
+    "D_SEXO_0" : "3691,3689,3690",
+    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_DURAULTEMPR_0],c[Measures]"
+}
+
+# Autónomos por sexo, grupo de edad y tipo de relaciones tenidas con la Seguridad Social en el año (*)
+url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44800?"
+
+params = {
+    "D_TEMPORAL_0" : "180156,180175,180194",
+    "D_AA_TERRITROIO_0" : "515892,515902",
+    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_DURAULTEMPR_0],c[Measures]"
+}
+
+
+# Inserción laboral al año del egreso de los egresados de formación profesional por curso académico de egreso, familia profesional y grupo de edad según tipo de estudios finalizados.
+
+url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/50810?"
+
+params = {
+    "D_TEMPORAL_0" : "55498,55517,55536,180156,180175"
+}

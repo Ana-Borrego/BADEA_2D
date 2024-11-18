@@ -1,0 +1,5 @@
+# =============================================================================
+# hierar_i = handler.hierarchies_info_df
+# 
+# hierar_i[hierar_i['Variable'] == "D_TEMPORAL_0"].to_excel("./info/id_ano.xlsx", index = False)
+# =============================================================================

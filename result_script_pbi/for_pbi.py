@@ -9,15 +9,13 @@ import pandas as pd
 import logging
 import re
 
-
-url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/50810?"
+url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
 
 params = {
-    "D_TEMPORAL_0" : "55498,55517,55536,180156,180175"
-# =============================================================================
-#     ,
-#     "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_TIPRELSSANO_0],c[Measures]"
-# =============================================================================
+    "D_TEMPORAL_0" : "180156,180175,180194",
+    "D_AA_TERRITROIO_0" : "515892,515902",
+    "D_SEXO_0" : "3691,3689,3690",
+    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_DURAULTEMPR_0],c[Measures]"
 }
 
 # Realizar request GET
@@ -64,19 +62,7 @@ class APIDataHandler:
         
         # Registro de mensajes de log en aplicaciones
         self.logger = logging.getLogger(f'{self.__class__.__name__} [{self.id_consulta}]')
-# =============================================================================
-# 
-#     def get_elements_of_response(self):
-#         self.logger.info("Presentación de los datos en diccionario.")
-#         return {
-#             "jerarquias": self.hierarchies,
-#             "medidas": self.measures,
-#             "metainfo": self.metainfo,
-#             "id_consulta": self.id_consulta,
-#             "datos": self.data
-#         }
-#     
-# =============================================================================
+
     def process_measures_columns(self, df_data):
         n_measures = len(self.measures)
         measures_des = []
@@ -229,12 +215,7 @@ class APIDataHandler:
         selected_columns = cod_columns + col_medida
         cod_df = self.df_data[selected_columns].copy()
         
-        # Preparación de la información de las jerarquías
-# =============================================================================
-#         if not self.hierarchies_info_df: 
-#             self.process_all_hierarchies()
-# =============================================================================
-            
+        # Preparación de la información de las jerarquías            
         hierarchies_used = pd.unique(self.hierarchies_info_df.Variable)
         name_cols = [re.search(r'D(?:_AA)?_(.*?)_0', elem).group(1) for elem in hierarchies_used]
         
@@ -259,8 +240,14 @@ class APIDataHandler:
         return cod_df
 
 
-# Requests 
+# Requests - Final result
 handler = APIDataHandler(response)
 dataset_aux = handler.get_DataFrame_dataJSON(process_measures = True) 
 processed_data = handler.process_all_hierarchies()
 dataset = handler.map_data_w_hierarchies_info()
+
+hierar_i = handler.hierarchies_info_df
+
+hierar_i[hierar_i['Variable'] == "D_TEMPORAL_0"].to_excel("./info/id_ano.xlsx", index = False)
+
+del dataset_aux, processed_data
