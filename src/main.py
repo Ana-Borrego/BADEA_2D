@@ -14,9 +14,6 @@ import re
 import os
 os.chdir("C:/Users/Ana Borrego/Desktop/proyectos/andalucia_emprende/VISOR/request_py/")
 from src import functions
-# =============================================================================
-# import functions
-# =============================================================================
 
 # Class for handle API response definition. 
 class APIDataHandler:
