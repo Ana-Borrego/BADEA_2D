@@ -1,0 +1,9 @@
+# Ignorar archivos de Excel en todo el repositorio
+*.xls
+*.xlsx
+
+# Ignorar la carpeta env/ (entorno virtual de Python)
+env/
+
+# Ignorar archivos específicos
+result_script_pbi/skjdfh.txt
