@@ -25,9 +25,14 @@ handler = main.APIDataHandler(response)
 dataset_aux = handler.get_DataFrame_dataJSON(process_measures = True) 
 processed_data = handler.process_all_hierarchies()
 
+# Método implementado ------------
+handler.save_hierarchies_level(path = file, level = hierarchie_to_save)
+
+# Lógica manual --------------------------
 # Guardar valores de una jerarquía en concreto
 hierar_i = handler.hierarchies_info_df
 hierar_i[hierar_i['Variable'] == hierarchie_to_save].to_excel(file, index = False)
 
 # Guardar fichero aplanado y mapeado final. 
 handler.df_data_mapped.to_excel(file, index = False)
+

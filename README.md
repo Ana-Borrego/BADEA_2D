@@ -171,8 +171,12 @@ Ahora ya tienes todas las dependencias necesarias instaladas para trabajar con e
             + Columna `COD_combination`: lista con los códigos referentes al nivel del valor de la jerarquía, de forma que ofrece información de quién es el padre y del camino recorrido para llegar a dicho valor de nivel. 
             + Columnas `Des{i}`: Son los distintos valores categóricos de los grupos recorridos para llegar al último nivel. Está relacionado directamente con la combinación de códigos `COD_combination`. Toma el valor None cuando no hay un nivel de desagregación mayor a `i`. 
 
-9. `.save_hierarchies_level(self, path)`: 
+9. `.save_hierarchies_level(self, path, level = None)`: 
     + Método para exportar la información de categorías de jerarquías.
+    + Si no se especifica `level`, se guardarán todas las jerarquías. 
+    + **Parámetros**: 
+        + `path` (`str`): Ruta donde se guardará el archivo Excel. 
+        + `level` (`str, opcional`): Nivel de jerarquía a filtrar si se quisiera. 
 
 10. `.map_data_w_hierarchies_info(self)`: 
     + **Descripción**: Mapea los datos originales (`self.dataset`) con la información de las jerarquías almacenada en `self.hierarchies_info_df`. Este método integra los valores jerárquicos dentro del conjunto de datos, normaliza los nombres de las columnas, y organiza las columnas para facilitar el análisis.

@@ -388,12 +388,17 @@ class APIDataHandler:
         # Devolver el DataFrame limpio
         return df
 
-    def save_hierarchies_level(self, path):
+    def save_hierarchies_level(self, path, level = None):
         """
         Método sencillo para guardar la tabla de desagregación y aplanamiento de jerarquías.
-        Puede ser útil para realiar consultas.
+        Puede ser filtrada para una jerarquía en específico. 
+        Puede ser útil para realizar consultas.
         """
-        self.hierarchies_info_df.to_excel(path)
+        df_hier = self.hierarchies_info_df
+        if level:
+            df_hier = df_hier[['Variable'] == level]
+        
+        df_hier.to_excel(path)
     
     def union_by_cod_combination(self, df1_data, df2_hier, col1, col2):
         """
