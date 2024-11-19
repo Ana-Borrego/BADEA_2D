@@ -1,5 +1,3 @@
-
-import pandas as pd
 import re
 
 def clean_text(texto):
