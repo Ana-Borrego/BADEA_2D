@@ -390,15 +390,30 @@ class APIDataHandler:
 
     def save_hierarchies_level(self, path, level = None):
         """
-        Método sencillo para guardar la tabla de desagregación y aplanamiento de jerarquías.
-        Puede ser filtrada para una jerarquía en específico. 
-        Puede ser útil para realizar consultas.
+        Método para guardar la tabla de desagregación y aplanamiento de jerarquías.
+        Si `level` está vacío, guarda la tabla completa. Si contiene un valor, 
+        guarda solo las filas correspondientes al nivel especificado.
+        Si la tabla `hierarchies_info_df` no existe o está vacía, llama al método 
+        `process_all_hierarchies` para generarla.
+
+        Parámetros:
+            path (str): Ruta donde se guardará el archivo Excel.
+            level (str, opcional): Nivel de jerarquía a filtrar. Si es None, se guarda la tabla completa.
         """
+        # Verificar si la tabla de jerarquías existe y está llena
+        if not hasattr(self, 'hierarchies_info_df') or self.hierarchies_info_df.empty:
+            print("La tabla de jerarquías no está disponible o está vacía. Procesando jerarquías...")
+            self.process_all_hierarchies()
+
+        # Trabajar con la tabla procesada
         df_hier = self.hierarchies_info_df
+
+        # Filtrar por nivel si se proporciona
         if level:
-            df_hier = df_hier[['Variable'] == level]
-        
-        df_hier.to_excel(path)
+            df_hier = df_hier[df_hier['Variable'] == level]
+
+        # Guardar el resultado en Excel
+        df_hier.to_excel(path, index=False)
     
     def union_by_cod_combination(self, df1_data, df2_hier, col1, col2):
         """
