@@ -224,8 +224,11 @@ class APIDataHandler:
         """
         Función para limpiar la combinación de códigos, eliminando "Total" y "TOTAL".
         De la tabla final de jerarquías. 
+
+        Hay jerarquías de la EPA que tiene una codificación para el TOTAL que no necesitamos para el mapeo y 
+        también debemos eliminar. 
         """
-        return [item for item in cod_combination if item not in ["Total", "TOTAL"]]
+        return [item for item in cod_combination if item not in ["Total", "TOTAL", "P1_00"]]
 
     @staticmethod
     def request_hierarchies_values(hierarchy_element):

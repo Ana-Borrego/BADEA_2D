@@ -9,13 +9,11 @@ import pandas as pd
 import logging
 import re
 
-url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/44804?"
+url ='https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/22899?'
 
 params = {
-    "D_TEMPORAL_0" : "180156,180175,180194",
-    "D_AA_TERRITROIO_0" : "515892,515902",
-    "D_SEXO_0" : "3691,3689,3690",
-    "posord" : "f[D_AA_TERRITROIO_0],f[D_TEMPORAL_0],f[D_SEXO_0],f[D_EDAD_0],f[D_AA_DURAULTEMPR_0],c[Measures]"
+    "D_TEMPORAL_0" : "180175,180194,180213" ,
+    "posord" : "f[D_EPA_METACENCEMP_0],f[D_TEMPORAL_0],f[D_SEXO_0],c[Measures]"
 }
 
 # Realizar request GET
@@ -115,7 +113,7 @@ class APIDataHandler:
         Función para limpiar la combinación de códigos, eliminando "Total" y "TOTAL".
         De la tabla final de jerarquías. 
         """
-        return [item for item in cod_combination if item not in ["Total", "TOTAL"]]
+        return [item for item in cod_combination if item not in ["Total", "TOTAL", "P1_00"]]
 
     @staticmethod
     def request_hierarchies_values(hierarchy_element):
@@ -151,6 +149,7 @@ class APIDataHandler:
         if not node["isLastLevel"] and node["children"]:
             for child in node["children"]:
                 self.process_hierarchy_level(alias, child, current_cod_combination, current_descriptions, level + 1)
+        
 
     def process_all_hierarchies(self): 
         hierarchies = self.hierarchies
@@ -245,4 +244,6 @@ dataset_aux = handler.get_DataFrame_dataJSON(process_measures = True)
 processed_data = handler.process_all_hierarchies()
 dataset = handler.map_data_w_hierarchies_info()
 
-del dataset_aux, processed_data
+# =============================================================================
+# del dataset_aux, processed_data
+# =============================================================================
