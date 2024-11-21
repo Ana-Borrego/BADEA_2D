@@ -9,11 +9,11 @@ import pandas as pd
 import logging
 import re
 
-url ='https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/22899?'
+url ='https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/14763?'
 
 params = {
-    "D_TEMPORAL_0" : "180175,180194,180213" ,
-    "posord" : "f[D_EPA_METACENCEMP_0],f[D_TEMPORAL_0],f[D_SEXO_0],c[Measures]"
+    "D_TEMPORAL_0" : "180156,180175,180194,180213" ,
+    "posord" : "f[D_EPA_SITUACIPROFES_0],f[D_SEXO_0],f[D_TEMPORAL_0],c[Measures],p[D_TERRITORIO_0]"
 }
 
 # Realizar request GET
