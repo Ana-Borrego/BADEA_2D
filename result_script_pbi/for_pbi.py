@@ -9,11 +9,11 @@ import pandas as pd
 import logging
 import re
 
-url ='https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/14763?'
+url ='https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/13514?'
 
 params = {
-    "D_TEMPORAL_0" : "180156,180175,180194,180213" ,
-    "posord" : "f[D_EPA_SITUACIPROFES_0],f[D_SEXO_0],f[D_TEMPORAL_0],c[Measures],p[D_TERRITORIO_0]"
+    "D_TEMPORAL_0" : "180156,180175,180194,180213",
+    "posord" : "f[D_SEXO_0],f[D_CNED2014_0],f[D_EPA_NIVEL_0],f[D_TEMPORAL_0],f[D_EDAD_0],c[Measures],p[D_EPA_RELACTIVIDAD_0],p[D_TERRITORIO_0]"
 }
 
 # Realizar request GET
@@ -129,7 +129,7 @@ class APIDataHandler:
 
         # Actualiza la combinación de códigos y la descripción para este nivel
         current_cod_combination = cod_combination + [node["cod"]]
-        current_descriptions = descriptions + [node["label"]]
+        current_descriptions = descriptions + [node["des"]]
 
         # Prepara la fila para agregar al resultado
         row = {
@@ -244,6 +244,5 @@ dataset_aux = handler.get_DataFrame_dataJSON(process_measures = True)
 processed_data = handler.process_all_hierarchies()
 dataset = handler.map_data_w_hierarchies_info()
 
-# =============================================================================
-# del dataset_aux, processed_data
-# =============================================================================
+del dataset_aux, processed_data
+
