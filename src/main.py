@@ -11,9 +11,9 @@ import logging
 import re
 
 # Auxiliar functions for processing data in APIHandlerData
-import os
-os.chdir("C:/Users/Ana Borrego/Desktop/proyectos/andalucia_emprende/VISOR/request_py/")
-from src import functions
+# import os
+# os.chdir("C:/Users/AnaBorrego/Desktop/Proyectos/ANDALUCIA_EMPRENDE/VISOR/BADEA_2D/")
+import functions
 
 # Class for handle API response definition. 
 class APIDataHandler:
@@ -300,7 +300,7 @@ class APIDataHandler:
 
         # Actualiza la combinación de códigos y la descripción para este nivel
         current_cod_combination = cod_combination + [node["cod"]]
-        current_descriptions = descriptions + [node["label"]]
+        current_descriptions = descriptions + [node["des"]]
 
         # Prepara la fila para agregar al resultado
         row = {
@@ -560,4 +560,15 @@ class APIDataHandler:
         
 
 
+# file = "C:/Users/AnaBorrego/Desktop/Proyectos/ANDALUCIA_EMPRENDE/VISOR/id_curso.xlsx" # ruta + nombre : donde queremos guardar el fichero en cuestión. 
+# hierarchie_to_save = "D_TEMPORAL_0"
 
+# url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/intranet/admin/rest/v1.0/consulta/50810?"
+# response = requests.get(url)
+
+# handler = APIDataHandler(response)
+# dataset_aux = handler.get_DataFrame_dataJSON(process_measures = True) 
+# processed_data = handler.process_all_hierarchies()
+
+# # Método implementado ------------
+# handler.save_hierarchies_level(path = file, level = hierarchie_to_save)
