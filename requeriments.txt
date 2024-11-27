@@ -3,3 +3,4 @@ pandas
 numpy
 unittest-xml-reporting
 matplotlib
+openpyxl
